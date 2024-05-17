@@ -32,9 +32,12 @@ async def get_todo():
     return response
 
 
-@app.get("/api/todo{id}")
-async def get_todo_by_id(id):
-    return 1
+@app.get("/api/todo/{title}", response_model=Todo)
+async def get_todo_by_title(title):
+    response = await fetch_one_todo(title)
+    if response:
+        return response
+    raise HTTPException(404, f"There is no todo with the title {title}")
 
 @app.post("/api/todo")
 async def post_todo(todo):
